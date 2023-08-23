@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+# Run this before you deploy it on replicate
+import os
+import sys
+import torch
+from transformers import IdeficsForVisionText2Text, AutoProcessor, BitsAndBytesConfig
+
+# append project directory to path so predict.py can be imported
+sys.path.append('.')
+from predict import MODEL_NAME, MODEL_CACHE
+
+# Make cache folders
+if not os.path.exists(MODEL_CACHE):
+    os.makedirs(MODEL_CACHE)
+
+# Model weights
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    llm_int8_skip_modules=["lm_head", "embed_tokens"],
+)
+
+model = IdeficsForVisionText2Text.from_pretrained(
+    MODEL_NAME,
+    quantization_config=bnb_config,
+    device_map="auto",
+    cache_dir=MODEL_CACHE
+)
+
+processor = AutoProcessor.from_pretrained(
+    MODEL_NAME,
+    cache_dir=MODEL_CACHE
+)

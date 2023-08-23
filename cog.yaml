@@ -1,0 +1,31 @@
+# Configuration for Cog ⚙️
+# Reference: https://github.com/replicate/cog/blob/main/docs/yaml.md
+
+build:
+  # set to true if your model requires a GPU
+  gpu: true
+  cuda: "11.8"
+  python_version: "3.10"
+  python_packages:
+    - "torch==2.0.0"
+    - "transformers==4.32.0"
+    - "torchvision"
+    - "PyYAML"
+    - "opencv-python"
+    - "numpy"
+    - "accelerate"
+    - "joblib"
+    - "parameterized"
+    - "einops"
+    - "pynvml"
+    - "safetensors"
+    - "diffusers"
+    - "sentencepiece"
+    - "text_generation"
+    - "protobuf"
+    - "bitsandbytes"
+    - "peft"
+    - "scipy"
+
+# predict.py defines how predictions are run on your model
+predict: "predict.py:Predictor"
